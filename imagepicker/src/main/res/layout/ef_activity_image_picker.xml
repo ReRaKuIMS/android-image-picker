@@ -5,12 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- NOTE: Android 15+ Edge-to-Edge 用の Spacer。
+         この View は system status bar の高さに動的に合わせ
+         toolbar と重ならないようにする。 -->
+    <View
+        android:id="@+id/ef_status_bar_spacer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimaryDark" />
+
     <include
         android:id="@+id/toolbar"
         layout="@layout/ef_imagepicker_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ef_status_bar_spacer" />
 
     <FrameLayout
         android:id="@+id/ef_imagepicker_fragment_placeholder"

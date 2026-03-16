@@ -12,6 +12,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.esafirm.imagepicker.R
 import com.esafirm.imagepicker.features.cameraonly.CameraOnlyConfig
 import com.esafirm.imagepicker.helper.ConfigUtils
@@ -79,6 +81,18 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerInteractionListener 
         val currentConfig = config!!
         setTheme(currentConfig.theme)
         setContentView(R.layout.ef_activity_image_picker)
+        // NOTE: Android 15+（API 35+）での Edge-to-Edge 対応のため、Window Insets を処理する
+        val rootView = findViewById<android.view.View>(R.id.main)
+        val statusBarSpacer = findViewById<android.view.View>(R.id.ef_status_bar_spacer)
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
+
+            statusBarSpacer.layoutParams.height = systemBars.top
+            statusBarSpacer.requestLayout()
+
+            insets
+        }
         setupView(currentConfig)
 
         if (savedInstanceState != null) {
